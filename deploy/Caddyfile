@@ -1,0 +1,16 @@
+# TLS in front of mongo-mcp. Caddy obtains and renews the certificate for
+# {$MCP_DOMAIN} automatically (ports 80 and 443 must be reachable).
+{$MCP_DOMAIN} {
+	# Only the MCP endpoint is public; everything else is 404.
+	@mcp path /mcp
+	handle @mcp {
+		reverse_proxy mcp:8765
+	}
+	handle {
+		respond 404
+	}
+	header -Server
+	log {
+		output stdout
+	}
+}

@@ -1,0 +1,57 @@
+# mongo-mcp on a VM: the MCP server plus Caddy for HTTPS.
+#
+#   cp .env.example .env                           # MCP_DOMAIN
+#   cp .env.sandbox.example .env.sandbox           # sandbox connection strings
+#   cp .env.production.example .env.production     # production connection strings
+#   cp config/connections.example.json config/connections.json
+#   cp config/users.example.json config/users.json # then add hashed accounts
+#   docker compose up -d --build
+#
+# Only Caddy publishes ports (80 for the certificate challenge, 443 for MCP).
+# The MCP container is reachable from Caddy only.
+services:
+  mcp:
+    build: .
+    image: mongo-mcp:local
+    restart: unless-stopped
+    expose:
+      - "8765"
+    env_file:
+      - path: .env.sandbox
+        required: false
+      - path: .env.production
+        required: false
+    environment:
+      MONGO_MCP_HTTP_ALLOWED_HOSTS: ${MCP_DOMAIN:?set MCP_DOMAIN in .env}
+      MONGO_MCP_DEBUG: ${MONGO_MCP_DEBUG:-0}
+    volumes:
+      - ./config/connections.json:/app/config/connections.json:ro
+      - ./config/users.json:/app/config/users.json:ro
+      - audit:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - mcp
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      MCP_DOMAIN: ${MCP_DOMAIN:?set MCP_DOMAIN in .env}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  audit: {}
+  caddy-data: {}
+  caddy-config: {}

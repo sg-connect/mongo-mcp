@@ -1,0 +1,4 @@
+{
+  "$comment": "Copy to config/users.json (git-ignored). One account per person. Values are scrypt hashes from: docker run --rm -it mongo-mcp:local node dist/cli.js --hash-password <username>. Plain-text passwords are refused.",
+  "alice": "scrypt$16384$8$1$REPLACE_WITH_SALT$REPLACE_WITH_HASH"
+}

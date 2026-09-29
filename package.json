@@ -1,0 +1,40 @@
+{
+  "name": "mongo-mcp",
+  "version": "0.1.0",
+  "description": "Self-hosted, read-only MongoDB MCP server over HTTPS with per-user authentication. Connection strings stay on the host.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "bin": {
+    "mongo-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "config/connections.example.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "dev": "tsx src/cli.ts",
+    "check": "tsx src/cli.ts --check",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "mongodb": "^7.6.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  }
+}

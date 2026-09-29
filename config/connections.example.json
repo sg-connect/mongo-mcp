@@ -1,0 +1,25 @@
+{
+  "$comment": "Copy to config/connections.json (git-ignored). One entry per cluster. uriEnv names the variable in .env.sandbox / .env.production that holds the connection string; the string itself never goes in this file. Only listed databases and collections are reachable.",
+
+  "sandbox-cluster0": {
+    "uriEnv": "SANDBOX_CLUSTER0_URI",
+    "production": false,
+    "description": "Sandbox cluster 0",
+    "allowedDatabases": ["example_db"],
+    "allowedCollections": ["*"]
+  },
+
+  "production-cluster0": {
+    "uriEnv": "PRODUCTION_CLUSTER0_URI",
+    "production": true,
+    "description": "Production cluster 0",
+    "allowedDatabases": ["example_db"],
+    "allowedCollections": ["orders", "customers"],
+    "defaultLimit": 20,
+    "maxLimit": 100,
+    "maxTimeMS": 10000,
+    "rejectCollscan": true,
+    "collscanMaxDocs": 10000,
+    "readPreference": "secondaryPreferred"
+  }
+}

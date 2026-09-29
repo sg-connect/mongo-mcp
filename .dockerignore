@@ -1,0 +1,14 @@
+node_modules
+dist
+tests
+deploy
+.env
+.env.*
+config/connections.json
+config/users.json
+config/*.local*.json
+*.jsonl
+*.log
+.git
+.DS_Store
+*.md
